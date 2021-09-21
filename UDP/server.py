@@ -11,12 +11,11 @@ def convertTuple(tup):
     return st
 
 while 1:
+    message, clientAddress,  = serverSocket.recvfrom(2048)
     time_string = time.asctime()
     print(time_string)
-
-    message, clientAddress,  = serverSocket.recvfrom(2048)
     print("client sent => ",message)
-    time.sleep(1)
+    """ time.sleep(3) """
 
     clientAddressString = convertTuple(clientAddress)
     messageOtput=time_string+" server'Address :=> 127.0.0.1:"+ str(serverPort) +", Your'Address :=> " + clientAddressString

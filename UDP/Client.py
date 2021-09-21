@@ -11,8 +11,11 @@ counter = count(0)
 
 def sentTCP(x):
     message = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
-    print("times : ",x)
+    time_string = time.asctime()
+   
+    print("Count : ",x)
     print("I send message to 127.0.0.1:2500")
+    print("เวลาที่ส่ง"+time_string)
     print("It says => ",message)
 
     clientSocket = socket(AF_INET, SOCK_DGRAM)
@@ -25,7 +28,7 @@ def sentTCP(x):
 
 def runUDP():
     time.sleep(1)
-    for x in range(0, 1):
+    for x in range(0, 3):
         sentTCP(x)
         next(counter)
 
