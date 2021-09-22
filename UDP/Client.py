@@ -9,7 +9,7 @@ serverPort = 2500
 
 counter = count(0)
 
-def sentTCP(x):
+def sentUDP(x):
     message = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
     time_string = time.asctime()
    
@@ -29,7 +29,7 @@ def sentTCP(x):
 def runUDP():
     time.sleep(1)
     for x in range(0, 3):
-        sentTCP(x)
+        sentUDP(x)
         next(counter)
 
 p1 = Process(target=runUDP, name='Process_inc_forever')
