@@ -18,6 +18,7 @@ int dataInput=0;
 int dataOutput=0;
 
 int count=0;
+int num=0;
 
 void setup(){
   pinMode(pin_pir_input, INPUT);
@@ -26,7 +27,9 @@ void setup(){
 
   pinMode(pin_LED_IN, OUTPUT); // sets the pin as output
   pinMode(pin_LED_OUT, OUTPUT); // sets the pin as output
-  
+  digitalWrite(pin_LED_OUT, LOW); 
+  digitalWrite(pin_LED_OUT, LOW);
+   
   // initialize the LCD
   lcd.begin();
   // Turn on the blacklight and print a message.
@@ -37,67 +40,46 @@ void setup(){
 }
 void loop() {
 
-
     // input 
     valInput = digitalRead(pin_pir_input); 
     Serial.print("valInput = ");
     Serial.println(valInput);
     if (valInput == 0) {
-      digitalWrite(pin_LED_IN, HIGH);
+      digitalWrite(pin_LED_IN, LOW);
     }
     else {
-        digitalWrite(pin_LED_IN, LOW);
+        digitalWrite(pin_LED_IN, HIGH);
         count=count+1;
+        num=num+1;
         beep(500);
     }
 
 
     // Out
     valOutput = digitalRead(pin_pir_output);
-    Serial.print(" valOutput = ");
+    Serial.print("valOutput = ");
     Serial.println( valOutput); 
     if (valOutput == 0) {
-      digitalWrite(pin_LED_OUT, HIGH);
+      digitalWrite(pin_LED_OUT, LOW);
     }
     else {
-      digitalWrite(pin_LED_OUT, LOW);
+        digitalWrite(pin_LED_OUT, HIGH);
         count=count-1;
         beep(500);
- 
     }
 
 
   // LED
   lcd.setCursor(0, 0); // ไปที่ตัวอักษรที่ 0 แถวที่ 1
-  lcd.print("Welcome To");
-  lcd.setCursor(6, 1); // ไปที่ตัวอักษรที่ 6 แถวที่ 2
+  lcd.print(num);
+  lcd.setCursor(0, 1); // ไปที่ตัวอักษรที่ 6 แถวที่ 2
   lcd.print(count);
-
-  Serial.println(""); 
   
+
+  Serial.println(count); 
+  Serial.println(""); 
   delay(500);
 
-
-
-  
-//  if (valInput == 1) { // ค่า เป็น 0 ตรวจจับเจอวัตถุ สั่งให้ไฟ LED ติด
-//    //beep(500);
-//    count=count+1;
-//    dataInput=1;
-//    digitalWrite(pin_LED_IN, HIGH);// LED on
-
-//  }else{
-//    digitalWrite(pin_LED_IN, LOW); // LED off
-//  }
-//
-//
-//  // LED
-//  lcd.setCursor(0, 0); // ไปที่ตัวอักษรที่ 0 แถวที่ 1
-//  lcd.print("Welcome To");
-//  lcd.setCursor(6, 1); // ไปที่ตัวอักษรที่ 6 แถวที่ 2
-//  lcd.print(valInput);
-//  delay(5000);
- 
 }
 
 // buzzer
