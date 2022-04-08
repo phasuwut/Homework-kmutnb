@@ -7,7 +7,7 @@
 #include <PubSubClient.h>
 
 // wifi
-const char* publish_topic = "@msg/temp";
+const char* publish_topic = "@msg/door";
 const char* ssid = "phasuwut";
 const char* password = "0909791498";
 
@@ -23,8 +23,7 @@ WiFiClient espClient;
 PubSubClient client(espClient);
 
 long lastMsg = 0;
-int value = 0;
-char msg[50]; // ksb
+
 char msg_fb[100];
 
 void reconnect() {
@@ -66,36 +65,25 @@ void setup() {
 }
 
 void loop() {
+
   if (!client.connected()) {
     reconnect();
   }
   client.loop();
+
   
   long now = millis();
   if (now - lastMsg > 2000) {
     lastMsg = now;
 
-    snprintf (msg, 50, "%ld", value);  //ksb
-    client.publish(publish_topic, msg); // ksb
-    Serial.println(value); // ksb
-
     String total = String(random(15,100));
     String day = String(random(20,70));
-
     String data = "{\"total\":"+total+",\"day\":"+day+"}";
-
- 
-
     String payload = "{\"data\":" + data + "}";
     Serial.println(payload);
-    
     payload.toCharArray(msg_fb, (payload.length() + 1));
     client.publish("@shadow/data/update", msg_fb);
-
-    ++value;
-    if (value >= 5) {
-      value = 0;  // reset
-    }
+ 
   }
   delay(10); 
 }
