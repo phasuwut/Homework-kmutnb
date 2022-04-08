@@ -93,7 +93,7 @@ void loop() {
     // Publish
     snprintf (msgTotal, 50, "Total #%ld",total.toInt());  //เตรียมข้อมูลก่อนที่จะ Publish
     client.publish(publish_topic_total, msgTotal); // ksb
-    snprintf (msgDay, 50, "%ld", daytotal.toInt());  //เตรียมข้อมูลก่อนที่จะ Publish
+    snprintf (msgDay, 50, "%ld", day.toInt());  //เตรียมข้อมูลก่อนที่จะ Publish
     client.publish(publish_topic_day, msgDay); // ksb
  
 
