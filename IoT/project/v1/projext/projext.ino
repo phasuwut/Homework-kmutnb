@@ -7,7 +7,10 @@
 #include <PubSubClient.h>
 
 // wifi
-const char* publish_topic = "@msg/door";
+const char* publish_topic_total = "@msg/door/total";
+const char* publish_topic_day = "@msg/door/day";
+
+
 const char* ssid = "phasuwut";
 const char* password = "0909791498";
 
@@ -25,6 +28,8 @@ PubSubClient client(espClient);
 long lastMsg = 0;
 
 char msg_fb[100];
+char msgTotal[50]; 
+char msgDay[50]; 
 
 void reconnect() {
   while (!client.connected()) {
@@ -76,6 +81,7 @@ void loop() {
   if (now - lastMsg > 2000) {
     lastMsg = now;
 
+    // MQTT
     String total = String(random(15,100));
     String day = String(random(20,70));
     String data = "{\"total\":"+total+",\"day\":"+day+"}";
@@ -83,6 +89,14 @@ void loop() {
     Serial.println(payload);
     payload.toCharArray(msg_fb, (payload.length() + 1));
     client.publish("@shadow/data/update", msg_fb);
+
+    // Publish
+    snprintf (msgTotal, 50, "Total #%ld",total.toInt());  //เตรียมข้อมูลก่อนที่จะ Publish
+    client.publish(publish_topic_total, msgTotal); // ksb
+    snprintf (msgDay, 50, "%ld", daytotal.toInt());  //เตรียมข้อมูลก่อนที่จะ Publish
+    client.publish(publish_topic_day, msgDay); // ksb
+ 
+
  
   }
   delay(10); 
