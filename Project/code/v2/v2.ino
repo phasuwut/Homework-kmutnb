@@ -42,10 +42,10 @@ int pin_pir_output=2;
 int pin_buzzer=12;
 int pin_LED_IN=13;
 int pin_LED_OUT=15;
+int pin_LED_Wifi_connect=16;
 int valInput = 0;
 int valOutput = 0;
-int dataInput=0;
-int dataOutput=0;
+
 int day=0;
 int total=0;
 
@@ -55,12 +55,17 @@ int total=0;
 
 
 void reconnect() {
+  
   while (!client.connected()) {
     Serial.print("Attempting MQTT connection…");
     if (client.connect(mqtt_Client, mqtt_username, mqtt_password)) {
       Serial.println("connected");
+      digitalWrite( pin_LED_Wifi_connect, HIGH);
     }
     else {
+      digitalWrite( pin_LED_Wifi_connect, LOW);
+
+      
       Serial.print("failed, rc=");
       Serial.print(client.state());
       Serial.println("try again in 5 seconds");
@@ -105,6 +110,8 @@ void setup() {
   // Turn on the blacklight and print a message.
   lcd.backlight();
 
+  pinMode(pin_LED_Wifi_connect, OUTPUT); 
+  digitalWrite( pin_LED_Wifi_connect, LOW);
 
   
 }
@@ -113,8 +120,11 @@ void loop() {
 
   if (!client.connected()) {
     reconnect();
+  }else{
+       digitalWrite( pin_LED_Wifi_connect, HIGH);
   }
   client.loop();
+
 
     // input 
     valInput = digitalRead(pin_pir_input); 
