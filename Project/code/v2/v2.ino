@@ -9,7 +9,7 @@
 #include <Wire.h>
 #include <LiquidCrystal_I2C.h>
 
-// wifi
+// topic
 const char *publish_topic_total = "@msg/door/total";
 const char *publish_topic_day = "@msg/door/day";
 
@@ -45,19 +45,14 @@ int valOutput = 0;
 int day = 0;
 int total = 0;
 
-void reconnect()
-{
-
-  while (!client.connected())
-  {
+void reconnect(){
+  while (!client.connected()) {
     Serial.print("Attempting MQTT connection…");
-    if (client.connect(mqtt_Client, mqtt_username, mqtt_password))
-    {
+    if (client.connect(mqtt_Client, mqtt_username, mqtt_password)) {
       Serial.println("connected");
       digitalWrite(pin_LED_Wifi_connect, HIGH);
     }
-    else
-    {
+    else {
       digitalWrite(pin_LED_Wifi_connect, LOW);
 
       Serial.print("failed, rc=");
@@ -68,8 +63,7 @@ void reconnect()
   }
 }
 
-void setup()
-{
+void setup() {
   Serial.begin(115200);
 
   Serial.println();
@@ -77,8 +71,7 @@ void setup()
   Serial.println(ssid);
   // wifi
   WiFi.begin(ssid, password);
-  while (WiFi.status() != WL_CONNECTED)
-  {
+  while (WiFi.status() != WL_CONNECTED) {
     delay(500);
     Serial.print(".");
   }
@@ -107,15 +100,12 @@ void setup()
   lcd.backlight();
 }
 
-void loop()
-{
+void loop() {
 
-  if (!client.connected())
-  {
+  if (!client.connected()){
     reconnect();
   }
-  else
-  {
+  else{
     digitalWrite(pin_LED_Wifi_connect, HIGH);
   }
   client.loop();
@@ -124,12 +114,10 @@ void loop()
   valInput = digitalRead(pin_pir_input);
   Serial.print("valInput = ");
   Serial.println(valInput);
-  if (valInput == 0)
-  {
+  if (valInput == 0) {
     digitalWrite(pin_LED_IN, LOW);
   }
-  else
-  {
+  else {
     digitalWrite(pin_LED_IN, HIGH);
     day = day + 1;
     total = total + 1;
@@ -140,19 +128,16 @@ void loop()
   valOutput = digitalRead(pin_pir_output);
   Serial.print("valOutput = ");
   Serial.println(valOutput);
-  if (valOutput == 0)
-  {
+  if (valOutput == 0){
     digitalWrite(pin_LED_OUT, LOW);
   }
-  else
-  {
+  else{
     digitalWrite(pin_LED_OUT, HIGH);
     day = day - 1;
     beep(500);
   }
 
-  if (day >= 5)
-  {
+  if (day >= 5) {
     openBuzzer();
   }
 
@@ -169,13 +154,10 @@ void loop()
   lcd.print(buffer_2);                 // display line on buffer
 
   long now = millis();
-  if (now - lastMsg > 2000)
-  {
+  if (now - lastMsg > 2000){
     lastMsg = now;
 
     // MQTT
-    // String total = String(random(15,100));
-    // String day = String(random(20,70));
     String data = "{\"total\":" + String(total) + ",\"day\":" + String(day) + "}";
     String payload = "{\"data\":" + data + "}";
     Serial.println(payload);
@@ -193,8 +175,7 @@ void loop()
 }
 
 // buzzer
-void beep(unsigned char delayms)
-{
+void beep(unsigned char delayms){
   analogWrite(pin_buzzer, 20); // Almost any value can be used except 0 and 255
   // experiment to get the best tone
   delay(delayms);             // wait for a delayms ms
@@ -202,8 +183,7 @@ void beep(unsigned char delayms)
   delay(delayms);             // wait for a delayms ms
 }
 
-void openBuzzer()
-{
+void openBuzzer(){
   tone(pin_buzzer, 500);
   delay(500);
   tone(pin_buzzer, 1000);
